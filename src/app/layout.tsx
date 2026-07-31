@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import { siteConfig } from '@/config/site';
 import { ThemeProvider } from '@/components/layout/ThemeProvider';
+import IntegrationScripts from '@/components/layout/IntegrationScripts';
 import './globals.css';
 
 const inter = Inter({
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     images: [
       {
-        url: '/logo.png',
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
         alt: siteConfig.name,
@@ -45,7 +46,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: siteConfig.title,
     description: siteConfig.description,
-    images: ['/logo.png'],
+    images: ['/og-image.jpg'],
   },
   robots: {
     index: true,
@@ -76,6 +77,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://maps.google.com" />
       </head>
       <body className="min-h-full flex flex-col bg-slate-950 text-slate-100 font-sans selection:bg-amber-500 selection:text-slate-950">
+        <IntegrationScripts />
         <ThemeProvider>
           {children}
         </ThemeProvider>
