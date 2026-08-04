@@ -2,6 +2,18 @@ import { getIntegrationsSettings } from '@/lib/data/settings';
 import Script from 'next/script';
 
 /**
+ * If the admin pasted the full <meta> tag instead of just the token,
+ * extract the bare content value so the rendered tag stays valid for
+ * Google Search Console verification.
+ */
+function extractVerificationToken(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return '';
+  const contentMatch = /content\s*=\s*["']([^"']+)["']/i.exec(trimmed);
+  return contentMatch ? contentMatch[1] : trimmed;
+}
+
+/**
  * Server component that reads third-party integrations from the site_settings table
  * and injects the required meta tags and scripts into the document head.
  */
@@ -20,13 +32,15 @@ export default async function IntegrationScripts() {
     microsoft_clarity,
   } = integrations;
 
+  const gscVerificationToken = extractVerificationToken(google_search_console || '');
+
   return (
     <>
       {/* Google Site Verification Meta Tag */}
-      {google_search_console && (
+      {gscVerificationToken && (
         <meta
           name="google-site-verification"
-          content={google_search_console}
+          content={gscVerificationToken}
         />
       )}
 

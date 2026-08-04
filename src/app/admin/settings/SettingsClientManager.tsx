@@ -546,7 +546,7 @@ export const IntegrationsClientManager: React.FC<{ initialSettings: SiteSettingR
                 placeholder="e.g., d5B8_Xq12_..."
               />
               <p className="text-[10px] text-slate-500 mt-1 leading-normal font-normal">
-                Paste the verification token code from your GSC HTML tag: <code>&lt;meta name="google-site-verification" content="<b>YOUR_ID</b>" /&gt;</code>.
+                Paste only the token ID (e.g. <code>dbleVHecwYXyAykr3Sa_fwf_zPPtDWFvOiefp1pVQWM</code>), or you may paste the full GSC meta tag — the app will extract the verification code automatically.
               </p>
             </div>
 
