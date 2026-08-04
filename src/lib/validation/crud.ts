@@ -111,7 +111,7 @@ export const galleryCrudSchema = z.object({
 
 export const seoMetadataCrudSchema = z.object({
   entity_type: z.string().min(2),
-  entity_id: uuidSchema().optional().or(z.literal('')).nullable(),
+  entity_id: z.string().optional().nullable(),
   meta_title: z.string().min(5, 'Meta title required'),
   meta_description: z.string().min(10, 'Meta description required'),
   meta_keywords: z.string().optional().or(z.literal('')),

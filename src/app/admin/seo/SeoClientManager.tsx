@@ -15,6 +15,7 @@ import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { saveSeoMetadataAction, deleteSeoMetadataAction, saveRobotsConfigAction } from '@/app/actions/crud';
 import { useToast } from '@/components/ui/toast';
 import { siteConfig } from '@/config/site';
+import { STATIC_PAGES } from '@/config/static-pages';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -29,7 +30,7 @@ interface Props {
 }
 
 const ENTITY_TYPES = [
-  { value: 'page',          label: '📄 Static Page',    hasEntities: false, urlPrefix: '' },
+  { value: 'page',          label: '📄 Static Page',    hasEntities: true,  urlPrefix: '' },
   { value: 'location',      label: '📍 Location',        hasEntities: true,  urlPrefix: '/locations/' },
   { value: 'project',       label: '🏗️ Project',         hasEntities: true,  urlPrefix: '/projects/' },
   { value: 'configuration', label: '🏠 Property',        hasEntities: true,  urlPrefix: '/properties/' },
@@ -302,6 +303,7 @@ export const SeoClientManager: React.FC<Props> = ({
   const entityTypeConfig = ENTITY_TYPES.find((t) => t.value === formData.entity_type)!;
   const entityOptions: EntityOption[] = (() => {
     switch (formData.entity_type) {
+      case 'page': return STATIC_PAGES.map((p) => ({ id: p.key, name: p.label, slug: p.path }));
       case 'location': return locations;
       case 'project': return projects;
       case 'configuration': return configurations;
@@ -500,6 +502,10 @@ export const SeoClientManager: React.FC<Props> = ({
                   {seoRecords.map((rec) => {
                     const linkedName = (() => {
                       if (!rec.entity_id) return null;
+                      if (rec.entity_type === 'page') {
+                        const sp = STATIC_PAGES.find((p) => p.key === rec.entity_id);
+                        return sp ? sp.label : rec.entity_id;
+                      }
                       const loc = locations.find((l) => l.id === rec.entity_id);
                       if (loc) return loc.name;
                       const proj = projects.find((p) => p.id === rec.entity_id);
@@ -749,7 +755,8 @@ export const SeoClientManager: React.FC<Props> = ({
                 {entityTypeConfig.hasEntities && (
                   <div>
                     <Label required>
-                      {formData.entity_type === 'location' ? 'Select Location'
+                      {formData.entity_type === 'page' ? 'Select Static Page'
+                        : formData.entity_type === 'location' ? 'Select Location'
                         : formData.entity_type === 'project' ? 'Select Project'
                         : 'Select Property'}
                     </Label>

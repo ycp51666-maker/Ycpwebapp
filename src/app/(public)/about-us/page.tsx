@@ -12,19 +12,14 @@ import {
   MapPin,
 } from 'lucide-react';
 import { getContentPage } from '@/lib/data';
-import { siteConfig } from '@/config/site';
 import { SiteVisitCTASection } from '@/components/public/SiteVisitCTASection';
 import { WhyChooseUsDeck } from '@/components/public/WhyChooseUsDeck';
 import { StatsSection } from '@/components/public/StatsSection';
+import { generateStaticPageMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
-  title: 'About Your Choice Properties | Real Estate Company in Namakkal',
-  description:
-    'Learn about Your Choice Properties, our honest approach and our experience in residential plots and villa development across Namakkal and Paramathi Velur.',
-  alternates: {
-    canonical: `${siteConfig.domain}/about-us`,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return generateStaticPageMetadata('about-us');
+}
 
 export interface WhyChoiceItem {
   title: string;

@@ -7,20 +7,11 @@ import { getPublishedProjects, getPublishedConfigurations, getLocationBySlug } f
 import { FeaturedProjectsSection } from '@/components/public/FeaturedProjectsSection';
 import { SiteVisitCTASection } from '@/components/public/SiteVisitCTASection';
 import { Badge } from '@/components/ui/badge';
+import { generateStaticPageMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
-  title: '2BHK 3BHK 4BHK Villas & Houses for Sale in Namakkal | Independent Homes',
-  description:
-    'Explore 2BHK, 3BHK, and 4BHK independent villas and houses for sale in Namakkal. Custom architectural planning, Vaastu compliant layouts, teakwood fittings, and covered parking.',
-  alternates: {
-    canonical: `${siteConfig.domain}/villas-for-sale-in-namakkal`,
-  },
-  openGraph: {
-    title: 'Villas & Houses for Sale in Namakkal | 2BHK, 3BHK & 4BHK Homes',
-    description: 'Explore independent villas and custom built house options in Namakkal.',
-    url: `${siteConfig.domain}/villas-for-sale-in-namakkal`,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return generateStaticPageMetadata('villas-for-sale-in-namakkal');
+}
 
 export default async function NamakkalVillasLandingPage() {
   const location = await getLocationBySlug('namakkal');

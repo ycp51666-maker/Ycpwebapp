@@ -2,34 +2,55 @@ import { Metadata } from 'next';
 import { createClient } from '@/lib/supabase/server';
 import { siteConfig } from '@/config/site';
 import { SEOMetadata } from '@/types/database';
+import { getStaticPageByKey } from '@/config/static-pages';
 
-// ─── Home page ────────────────────────────────────────────────────────────────
+// ─── Static page metadata ─────────────────────────────────────────────────────
 
-export async function generateHomePageMetadata(): Promise<Metadata> {
+/**
+ * Fetches the admin-managed SEO override for a static page.
+ * Static pages are identified by their route key (e.g. 'about-us', 'contact-us').
+ * The key is stored in the `entity_id` column with `entity_type = 'page'`.
+ */
+export async function getStaticPageSeoOverride(pageKey: string): Promise<SEOMetadata | null> {
   try {
     const supabase = await createClient();
     const { data } = await supabase
       .from('seo_metadata')
       .select('*')
       .eq('entity_type', 'page')
-      .filter('entity_id', 'is', null)
+      .eq('entity_id', pageKey)
       .maybeSingle();
-
-    const seoRecord = data as SEOMetadata | null;
-    return buildMetadataFromOverride(seoRecord, {
-      title: siteConfig.title,
-      description: siteConfig.description,
-      canonicalUrl: siteConfig.domain,
-      ogImage: `${siteConfig.domain}/logo.png`,
-    });
+    return (data as SEOMetadata | null) ?? null;
   } catch {
-    return buildMetadataFromOverride(null, {
-      title: siteConfig.title,
-      description: siteConfig.description,
-      canonicalUrl: siteConfig.domain,
-      ogImage: `${siteConfig.domain}/logo.png`,
-    });
+    return null;
   }
+}
+
+/**
+ * Generates metadata for a static page, merging the admin override with defaults.
+ * Falls back to the static page's default title/description if no override exists.
+ */
+export async function generateStaticPageMetadata(pageKey: string): Promise<Metadata> {
+  const pageDef = getStaticPageByKey(pageKey);
+  const fallback = {
+    title: pageDef?.defaultTitle || siteConfig.title,
+    description: pageDef?.defaultDescription || siteConfig.description,
+    canonicalUrl: pageDef ? `${siteConfig.domain}${pageDef.path === '/' ? '' : pageDef.path}` : siteConfig.domain,
+    ogImage: pageDef?.defaultOgImage || `${siteConfig.domain}/logo.png`,
+  };
+
+  try {
+    const override = await getStaticPageSeoOverride(pageKey);
+    return buildMetadataFromOverride(override, fallback);
+  } catch {
+    return buildMetadataFromOverride(null, fallback);
+  }
+}
+
+// ─── Home page ────────────────────────────────────────────────────────────────
+
+export async function generateHomePageMetadata(): Promise<Metadata> {
+  return generateStaticPageMetadata('home');
 }
 
 // ─── Generic entity override ──────────────────────────────────────────────────
@@ -95,10 +116,16 @@ export function buildMetadataFromOverride(
         noarchive: robotsParts.includes('noarchive'),
         nosnippet: robotsParts.includes('nosnippet'),
       }
-    : { index: false, follow: false };
+    : {
+        index: false,
+        follow: !robotsParts.includes('nofollow'),
+        noarchive: robotsParts.includes('noarchive'),
+        nosnippet: robotsParts.includes('nosnippet'),
+      };
 
   const ogType = (override?.og_type || 'website') as any;
   const twitterCard = (override?.twitter_card || 'summary_large_image') as any;
+  const ogImageAlt = override?.open_graph_image_alt || title;
 
   return {
     title,
@@ -118,7 +145,7 @@ export function buildMetadataFromOverride(
           url: ogImage,
           width: 1200,
           height: 630,
-          alt: title,
+          alt: ogImageAlt,
         },
       ],
       locale: 'en_IN',

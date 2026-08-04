@@ -8,15 +8,11 @@ import { siteConfig } from '@/config/site';
 import { getFAQs, getContentPage, getSocialLinks, getContactInfo } from '@/lib/data';
 import { ContactForm } from '@/components/forms/ContactForm';
 import { FAQSection } from '@/components/public/FAQSection';
+import { generateStaticPageMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
-  title: 'Contact Your Choice Properties | Villas & Plots in Namakkal & Paramathi velur',
-  description:
-    'Contact Your Choice Properties today for premium villas and DTCP approved plots in Namakkal and Paramathy Velur. Schedule a free site visit.',
-  alternates: {
-    canonical: `${siteConfig.domain}/contact-us`,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return generateStaticPageMetadata('contact-us');
+}
 
 export default async function ContactUsPage() {
   const [faqs, socialLinks, dbContactInfo] = await Promise.all([

@@ -4,14 +4,11 @@ import Link from 'next/link';
 import { ChevronRight, FileText } from 'lucide-react';
 import { getContentPage } from '@/lib/data';
 import { siteConfig } from '@/config/site';
+import { generateStaticPageMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
-  title: 'Terms and Conditions | Your Choice Properties',
-  description: 'Terms of service governing site usage, property reservations, site visit scheduling, and legal title disclaimers.',
-  alternates: {
-    canonical: `${siteConfig.domain}/terms-and-conditions`,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return generateStaticPageMetadata('terms-and-conditions');
+}
 
 export default async function TermsAndConditionsPage() {
   const page = await getContentPage('terms');

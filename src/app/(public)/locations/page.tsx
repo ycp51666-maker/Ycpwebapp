@@ -5,14 +5,13 @@ import Image from 'next/image';
 import { MapPin, ArrowRight, Building2, Sparkles } from 'lucide-react';
 import { getPublishedLocations } from '@/lib/data';
 import { Badge } from '@/components/ui/badge';
+import { generateStaticPageMetadata } from '@/lib/seo/metadata';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = {
-  title: 'Explore Locations | Your Choice Properties',
-  description:
-    'Discover current and upcoming residential land layouts, gated townships, and villa locations in Namakkal, Paramathi Velur, Erode, and Salem.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return generateStaticPageMetadata('locations');
+}
 
 export default async function LocationsListingPage() {
   const [currentLocations, upcomingLocations] = await Promise.all([

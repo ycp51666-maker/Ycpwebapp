@@ -6,15 +6,11 @@ import { getPublishedConfigurations, getPublishedLocations, getPublishedProjects
 import { siteConfig } from '@/config/site';
 import { Badge } from '@/components/ui/badge';
 import { EmptyState } from '@/components/ui/empty-state';
+import { generateStaticPageMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
-  title: 'All Property Configurations & Villa Layouts',
-  description:
-    'Search through DTCP approved residential villa plots, 2BHK/3BHK villas, and commercial properties across Tamil Nadu.',
-  alternates: {
-    canonical: `${siteConfig.domain}/properties`,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return generateStaticPageMetadata('properties');
+}
 
 export interface PropertiesListingPageProps {
   searchParams: Promise<{

@@ -4,14 +4,11 @@ import Link from 'next/link';
 import { ChevronRight, ShieldCheck } from 'lucide-react';
 import { getContentPage, getContactInfo } from '@/lib/data';
 import { siteConfig } from '@/config/site';
+import { generateStaticPageMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
-  title: 'Privacy Policy | Your Choice Properties',
-  description: 'Understand how Your Choice Properties collects, protects, and uses customer contact and site visit information.',
-  alternates: {
-    canonical: `${siteConfig.domain}/privacy-policy`,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return generateStaticPageMetadata('privacy-policy');
+}
 
 export default async function PrivacyPolicyPage() {
   const [page, contactInfo] = await Promise.all([

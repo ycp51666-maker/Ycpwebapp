@@ -7,20 +7,11 @@ import { getPublishedProjects, getPublishedConfigurations, getLocationBySlug } f
 import { FeaturedProjectsSection } from '@/components/public/FeaturedProjectsSection';
 import { SiteVisitCTASection } from '@/components/public/SiteVisitCTASection';
 import { Badge } from '@/components/ui/badge';
+import { generateStaticPageMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
-  title: 'DTCP Approved Plots in Paramathi Velur | Kongu Garden Layouts',
-  description:
-    'Explore DTCP approved plot sites for sale in Paramathi Velur. Strategic highway connectivity, blacktop roads, groundwater facilities, and clear title documentation.',
-  alternates: {
-    canonical: `${siteConfig.domain}/dtcp-approved-plots-in-paramathi-velur`,
-  },
-  openGraph: {
-    title: 'DTCP Approved Plots in Paramathi Velur | Kongu Garden Layouts',
-    description: 'Explore DTCP approved plots and house sites in Paramathi Velur — Kongu Garden.',
-    url: `${siteConfig.domain}/dtcp-approved-plots-in-paramathi-velur`,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return generateStaticPageMetadata('dtcp-approved-plots-in-paramathi-velur');
+}
 
 export default async function ParamathiVelurPlotsLandingPage() {
   const location = await getLocationBySlug('paramathi-velur');

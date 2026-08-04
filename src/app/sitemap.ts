@@ -33,21 +33,21 @@ async function getSitemapOverrides(): Promise<Map<string, SEOMetadata>> {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = siteConfig.domain;
 
-  // Static routes — always included, hardcoded priority
-  const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${baseUrl}`,                                        lastModified: new Date(), changeFrequency: 'daily',   priority: 1.0 },
-    { url: `${baseUrl}/locations`,                              lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.9 },
-    { url: `${baseUrl}/projects`,                               lastModified: new Date(), changeFrequency: 'daily',   priority: 0.9 },
-    { url: `${baseUrl}/properties`,                             lastModified: new Date(), changeFrequency: 'daily',   priority: 0.9 },
-    { url: `${baseUrl}/plots-for-sale-in-namakkal`,             lastModified: new Date(), changeFrequency: 'daily',   priority: 0.9 },
-    { url: `${baseUrl}/dtcp-approved-plots-in-paramathi-velur`, lastModified: new Date(), changeFrequency: 'daily',   priority: 0.9 },
-    { url: `${baseUrl}/villas-for-sale-in-namakkal`,            lastModified: new Date(), changeFrequency: 'daily',   priority: 0.9 },
-    { url: `${baseUrl}/about-us`,                               lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${baseUrl}/services`,                               lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${baseUrl}/gallery`,                                lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.7 },
-    { url: `${baseUrl}/contact-us`,                             lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${baseUrl}/privacy-policy`,                         lastModified: new Date(), changeFrequency: 'yearly',  priority: 0.3 },
-    { url: `${baseUrl}/terms-and-conditions`,                   lastModified: new Date(), changeFrequency: 'yearly',  priority: 0.3 },
+  // Static routes — defaults, overridable via SEO records
+  const staticRouteDefaults: Array<{ key: string; url: string; changeFrequency: ChangeFreq; priority: number }> = [
+    { key: 'home', url: `${baseUrl}`, changeFrequency: 'daily', priority: 1.0 },
+    { key: 'locations', url: `${baseUrl}/locations`, changeFrequency: 'weekly', priority: 0.9 },
+    { key: 'projects', url: `${baseUrl}/projects`, changeFrequency: 'daily', priority: 0.9 },
+    { key: 'properties', url: `${baseUrl}/properties`, changeFrequency: 'daily', priority: 0.9 },
+    { key: 'plots-for-sale-in-namakkal', url: `${baseUrl}/plots-for-sale-in-namakkal`, changeFrequency: 'daily', priority: 0.9 },
+    { key: 'dtcp-approved-plots-in-paramathi-velur', url: `${baseUrl}/dtcp-approved-plots-in-paramathi-velur`, changeFrequency: 'daily', priority: 0.9 },
+    { key: 'villas-for-sale-in-namakkal', url: `${baseUrl}/villas-for-sale-in-namakkal`, changeFrequency: 'daily', priority: 0.9 },
+    { key: 'about-us', url: `${baseUrl}/about-us`, changeFrequency: 'monthly', priority: 0.7 },
+    { key: 'services', url: `${baseUrl}/services`, changeFrequency: 'monthly', priority: 0.7 },
+    { key: 'gallery', url: `${baseUrl}/gallery`, changeFrequency: 'weekly', priority: 0.7 },
+    { key: 'contact-us', url: `${baseUrl}/contact-us`, changeFrequency: 'monthly', priority: 0.8 },
+    { key: 'privacy-policy', url: `${baseUrl}/privacy-policy`, changeFrequency: 'yearly', priority: 0.3 },
+    { key: 'terms-and-conditions', url: `${baseUrl}/terms-and-conditions`, changeFrequency: 'yearly', priority: 0.3 },
   ];
 
   const [locations, projects, properties, overrides] = await Promise.all([
@@ -118,6 +118,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { changeFrequency: 'weekly', priority: 0.8 },
         new Date(prop.updated_at || prop.created_at),
         `${baseUrl}/properties/${prop.slug}`,
+      ),
+    )
+    .filter(Boolean) as MetadataRoute.Sitemap;
+
+  // Apply static page overrides (index_enabled=false excludes from sitemap)
+  const staticRoutes: MetadataRoute.Sitemap = staticRouteDefaults
+    .map((route) =>
+      applyOverride(
+        route.key,
+        { changeFrequency: route.changeFrequency, priority: route.priority },
+        new Date(),
+        route.url,
       ),
     )
     .filter(Boolean) as MetadataRoute.Sitemap;

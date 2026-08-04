@@ -476,7 +476,22 @@ export async function saveSeoMetadataAction(data: Record<string, unknown>, id?: 
     const { error } = await query;
     if (error) return { success: false, error: error.message };
 
+    // Revalidate all relevant routes
     revalidatePath('/', 'layout');
+    revalidatePath('/sitemap.xml');
+    revalidatePath('/robots.txt');
+    revalidatePath('/about-us');
+    revalidatePath('/contact-us');
+    revalidatePath('/services');
+    revalidatePath('/gallery');
+    revalidatePath('/locations');
+    revalidatePath('/projects');
+    revalidatePath('/properties');
+    revalidatePath('/privacy-policy');
+    revalidatePath('/terms-and-conditions');
+    revalidatePath('/plots-for-sale-in-namakkal');
+    revalidatePath('/dtcp-approved-plots-in-paramathi-velur');
+    revalidatePath('/villas-for-sale-in-namakkal');
     return { success: true };
   } catch {
     return { success: false, error: 'Failed to save SEO metadata entry.' };
@@ -490,6 +505,20 @@ export async function deleteSeoMetadataAction(id: string) {
     const { error } = await supabase.from('seo_metadata').delete().eq('id', id);
     if (error) return { success: false, error: error.message };
     revalidatePath('/', 'layout');
+    revalidatePath('/sitemap.xml');
+    revalidatePath('/robots.txt');
+    revalidatePath('/about-us');
+    revalidatePath('/contact-us');
+    revalidatePath('/services');
+    revalidatePath('/gallery');
+    revalidatePath('/locations');
+    revalidatePath('/projects');
+    revalidatePath('/properties');
+    revalidatePath('/privacy-policy');
+    revalidatePath('/terms-and-conditions');
+    revalidatePath('/plots-for-sale-in-namakkal');
+    revalidatePath('/dtcp-approved-plots-in-paramathi-velur');
+    revalidatePath('/villas-for-sale-in-namakkal');
     return { success: true };
   } catch {
     return { success: false, error: 'Failed to delete SEO metadata entry.' };

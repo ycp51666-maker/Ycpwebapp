@@ -2,17 +2,12 @@ import React from 'react';
 import { Metadata } from 'next';
 import { Camera } from 'lucide-react';
 import { getPublishedGalleryItems, getPublishedProjects, getPublishedLocations } from '@/lib/data';
-import { siteConfig } from '@/config/site';
 import { GalleryClientView } from '@/components/public/GalleryClientView';
+import { generateStaticPageMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
-  title: 'Photo & Video Gallery – Your Choice Properties',
-  description:
-    'View real site photos, villa designs, road infrastructure, YouTube walkthroughs and Instagram reels across Rasi Garden, Kongu Nagar & Kongu Garden in Namakkal & Paramathy Velur.',
-  alternates: {
-    canonical: `${siteConfig.domain}/gallery`,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return generateStaticPageMetadata('gallery');
+}
 
 export default async function GalleryPage() {
   const [galleryItems, projects, locations] = await Promise.all([

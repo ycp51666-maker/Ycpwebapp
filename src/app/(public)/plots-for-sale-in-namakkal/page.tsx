@@ -7,20 +7,11 @@ import { getPublishedProjects, getPublishedConfigurations, getLocationBySlug } f
 import { FeaturedProjectsSection } from '@/components/public/FeaturedProjectsSection';
 import { SiteVisitCTASection } from '@/components/public/SiteVisitCTASection';
 import { Badge } from '@/components/ui/badge';
+import { generateStaticPageMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
-  title: 'DTCP Approved Plots for Sale in Namakkal | Rasi Garden & Kongu Nagar',
-  description:
-    'Explore residential DTCP approved plots for sale in Namakkal. Clear title documents, blacktop roads, underground drainage, and transparent pricing.',
-  alternates: {
-    canonical: `${siteConfig.domain}/plots-for-sale-in-namakkal`,
-  },
-  openGraph: {
-    title: 'DTCP Approved Plots for Sale in Namakkal | Clear Title Layouts',
-    description: 'Explore DTCP approved plot layouts in Namakkal — Rasi Garden & Kongu Nagar.',
-    url: `${siteConfig.domain}/plots-for-sale-in-namakkal`,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return generateStaticPageMetadata('plots-for-sale-in-namakkal');
+}
 
 export default async function NamakkalPlotsLandingPage() {
   const location = await getLocationBySlug('namakkal');

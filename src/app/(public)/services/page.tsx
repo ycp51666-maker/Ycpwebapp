@@ -12,17 +12,12 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { getContentPage } from '@/lib/data';
-import { siteConfig } from '@/config/site';
 import { SiteVisitCTASection } from '@/components/public/SiteVisitCTASection';
+import { generateStaticPageMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
-  title: 'Our Services | Plots, Villas and Houses in Namakkal',
-  description:
-    'Explore plot sales, villa and house sales, site visits, documentation support and home-loan guidance from Your Choice Properties in Namakkal and Paramathi Velur.',
-  alternates: {
-    canonical: `${siteConfig.domain}/services`,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return generateStaticPageMetadata('services');
+}
 
 export interface ServiceItem {
   id: string;

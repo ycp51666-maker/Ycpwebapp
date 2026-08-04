@@ -2,12 +2,11 @@ import React from 'react';
 import { Metadata } from 'next';
 import { getPublishedProjects } from '@/lib/data';
 import { FeaturedProjectsSection } from '@/components/public/FeaturedProjectsSection';
+import { generateStaticPageMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
-  title: 'Our Residential Projects | Your Choice Properties',
-  description:
-    'Explore our residential plots and villa projects in Namakkal and Paramathi Velur. Compare the location, available property types and project details before arranging a site visit.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return generateStaticPageMetadata('projects');
+}
 
 export default async function ProjectsPage() {
   const projects = await getPublishedProjects();
