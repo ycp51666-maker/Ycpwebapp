@@ -3,6 +3,8 @@ import { siteConfig } from '@/config/site';
 import { ThemeProvider } from '@/components/layout/ThemeProvider';
 import './globals.css';
 
+const ogImage = new URL('/og-image.jpg', siteConfig.domain).toString();
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.domain),
   title: {
@@ -27,7 +29,7 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     images: [
       {
-        url: '/og-image.jpg',
+        url: ogImage,
         width: 1200,
         height: 630,
         alt: siteConfig.name,
@@ -38,7 +40,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: siteConfig.title,
     description: siteConfig.description,
-    images: ['/og-image.jpg'],
+    images: [ogImage],
   },
   robots: {
     index: true,
@@ -67,6 +69,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://img.youtube.com" />
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://maps.google.com" />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:image" content={ogImage} />
       </head>
       <body className="min-h-full flex flex-col bg-slate-950 text-slate-100 font-sans selection:bg-amber-500 selection:text-slate-950">
         <ThemeProvider>

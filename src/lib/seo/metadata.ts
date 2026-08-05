@@ -103,7 +103,16 @@ export function buildMetadataFromOverride(
   const canonical = override?.canonical_url || fallback.canonicalUrl;
   const ogTitle = override?.open_graph_title || title;
   const ogDescription = override?.open_graph_description || description;
-  const ogImage = override?.open_graph_image_path || fallback.ogImage || `${siteConfig.domain}/logo.png`;
+  const rawOgImage = override?.open_graph_image_path || fallback.ogImage || `${siteConfig.domain}/logo.png`;
+  const ogImage = (() => {
+    if (!rawOgImage) return `${siteConfig.domain}/logo.png`;
+    // Already absolute
+    if (/^https?:\/\//i.test(rawOgImage)) return rawOgImage;
+    // If starts with protocol-less '//' add https:
+    if (/^\/\//.test(rawOgImage)) return `https:${rawOgImage}`;
+    // Otherwise treat as path and prefix site domain
+    return `${siteConfig.domain}${rawOgImage.startsWith('/') ? '' : '/'}${rawOgImage}`;
+  })();
   const indexed = override?.index_enabled ?? true;
 
   const keywords = override?.meta_keywords
