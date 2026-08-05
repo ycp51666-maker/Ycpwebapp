@@ -59,6 +59,7 @@ export async function generateMetadata({ params }: PropertyDetailPageProps): Pro
       config.short_description ||
       `Explore details for ${config.name} at ${config.project?.name} in ${config.project?.location?.name || 'Namakkal'}.`,
     canonicalUrl: `${siteConfig.domain}/properties/${config.slug}`,
+    ogImage: config.hero_image_path || config.project?.hero_image_path || undefined,
   });
 }
 

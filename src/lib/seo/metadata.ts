@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { siteConfig } from '@/config/site';
 import { SEOMetadata } from '@/types/database';
 import { getStaticPageByKey } from '@/config/static-pages';
+import { getMediaUrl } from '@/lib/utils/media';
 
 type OpenGraphType = 'website' | 'article';
 type TwitterCardType = 'summary' | 'summary_large_image';
@@ -39,7 +40,7 @@ export async function generateStaticPageMetadata(pageKey: string): Promise<Metad
     title: pageDef?.defaultTitle || siteConfig.title,
     description: pageDef?.defaultDescription || siteConfig.description,
     canonicalUrl: pageDef ? `${siteConfig.domain}${pageDef.path === '/' ? '' : pageDef.path}` : siteConfig.domain,
-    ogImage: pageDef?.defaultOgImage || `${siteConfig.domain}/logo.png`,
+    ogImage: pageDef?.defaultOgImage || `${siteConfig.domain}/og-image.jpg`,
   };
 
   try {
@@ -103,15 +104,18 @@ export function buildMetadataFromOverride(
   const canonical = override?.canonical_url || fallback.canonicalUrl;
   const ogTitle = override?.open_graph_title || title;
   const ogDescription = override?.open_graph_description || description;
-  const rawOgImage = override?.open_graph_image_path || fallback.ogImage || `${siteConfig.domain}/logo.png`;
+  const rawOgImage = override?.open_graph_image_path || fallback.ogImage || `${siteConfig.domain}/og-image.jpg`;
   const ogImage = (() => {
-    if (!rawOgImage) return `${siteConfig.domain}/logo.png`;
+    if (!rawOgImage) return `${siteConfig.domain}/og-image.jpg`;
+    // Resolve Supabase storage paths, absolute URLs, and domain-relative paths
+    const resolved = getMediaUrl(rawOgImage);
+    if (!resolved) return `${siteConfig.domain}/og-image.jpg`;
     // Already absolute
-    if (/^https?:\/\//i.test(rawOgImage)) return rawOgImage;
+    if (/^https?:\/\//i.test(resolved)) return resolved;
     // If starts with protocol-less '//' add https:
-    if (/^\/\//.test(rawOgImage)) return `https:${rawOgImage}`;
+    if (/^\/\//.test(resolved)) return `https:${resolved}`;
     // Otherwise treat as path and prefix site domain
-    return `${siteConfig.domain}${rawOgImage.startsWith('/') ? '' : '/'}${rawOgImage}`;
+    return `${siteConfig.domain}${resolved.startsWith('/') ? '' : '/'}${resolved}`;
   })();
   const indexed = override?.index_enabled ?? true;
 
