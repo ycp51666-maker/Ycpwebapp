@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Phone, MessageSquare, Calendar, ChevronLeft, GripVertical } from 'lucide-react';
+import { Phone, Calendar, ChevronLeft, GripVertical } from 'lucide-react';
 import { trackConversionEvent } from '@/lib/utils/analytics';
 import { Dialog } from '@/components/ui/dialog';
 import { SiteVisitForm } from '@/components/forms/SiteVisitForm';

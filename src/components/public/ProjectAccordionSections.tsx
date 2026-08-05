@@ -41,15 +41,9 @@ import { Button } from '@/components/ui/button';
 import { Dialog } from '@/components/ui/dialog';
 import { GalleryLightbox } from '@/components/public/GalleryLightbox';
 import { ProjectVideoPlayer } from '@/components/public/ProjectVideoPlayer';
-import { ProjectLandmarksPopup } from '@/components/public/ProjectLandmarksPopup';
-import { ProjectLocationMapPopup } from '@/components/public/ProjectLocationMapPopup';
 import { SiteVisitForm } from '@/components/forms/SiteVisitForm';
 import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
 import { buildWhatsAppUrl } from '@/lib/utils/whatsapp';
-import {
-  groupByKind, getKindLabel, GalleryMediaKind,
-} from '@/lib/utils/gallery';
-import { Camera, Film, Tv2, Share2 } from 'lucide-react';
 
 export interface ProjectAccordionSectionsProps {
   project: Project;
@@ -234,8 +228,6 @@ export const ProjectAccordionSections: React.FC<ProjectAccordionSectionsProps> =
       index: sliderState.index < sliderState.images.length - 1 ? sliderState.index + 1 : 0,
     });
   };
-
-  const embeddedMapUrl = buildEmbeddedMapUrl(project);
 
   return (
     <div className="space-y-12">

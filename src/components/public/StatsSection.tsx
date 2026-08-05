@@ -14,14 +14,6 @@ export interface StatsSectionProps {
   isVisible?: boolean;
 }
 
-const DEFAULT_STATS: StatItem[] = [
-  { label: 'Years of Experience', value: '13+', icon: 'Award' },
-  { label: 'Successful Projects', value: '5', icon: 'Building2' },
-  { label: 'Happy Customers', value: '135+', icon: 'Users' },
-  { label: 'Plots Sold', value: '120+', icon: 'Maximize' },
-  { label: 'Villas Sold', value: '15+', icon: 'Home' },
-];
-
 const AnimatedCounter: React.FC<{ value: string }> = ({ value }) => {
   // Strip commas to correctly parse values like "1,200"
   const cleanValue = value.replace(/,/g, '');

@@ -58,7 +58,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
         {/* Footer Callout Below FAQ */}
         <div className="mt-12 text-center pt-8 border-t border-slate-900/80 space-y-4">
           <h2 className="font-serif text-xl sm:text-2xl font-bold text-white max-w-2xl mx-auto leading-relaxed">
-            If you didn't find the answer you were looking for, our team is happy to help directly.
+            If you didn&apos;t find the answer you were looking for, our team is happy to help directly.
           </h2>
           <div>
             <Link

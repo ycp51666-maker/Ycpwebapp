@@ -15,10 +15,37 @@ import {
 import { isSlugUnique } from '@/lib/utils/slug';
 import { ContentPageKey } from '@/types/database';
 
-// Helper for type-safe Supabase table queries
+type LooseQueryResult = { data?: unknown; error?: { message: string } | null; count?: number | null };
+
+interface LooseQueryBuilder extends PromiseLike<LooseQueryResult> {
+  select(columns?: string, options?: unknown): LooseQueryBuilder;
+  update(data: unknown): LooseQueryBuilder;
+  insert(data: unknown): LooseQueryBuilder;
+  delete(): LooseQueryBuilder;
+  upsert(data: unknown, options?: unknown): LooseQueryBuilder;
+  eq(column: string, value: unknown): LooseQueryBuilder;
+  order(column: string, options?: unknown): LooseQueryBuilder;
+}
+
+interface LooseSupabaseClient {
+  from(table: string): LooseQueryBuilder;
+}
+
 async function getSupabaseAdmin() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (await createAdminClient()) as any;
+  return (await createAdminClient()) as unknown as LooseSupabaseClient;
+}
+
+function getErrorMessage(err: unknown, fallback: string): string {
+  return err instanceof Error ? err.message : fallback;
+}
+
+function isZodErrorLike(err: unknown): err is { errors: Array<{ path: Array<string | number>; message: string }> } {
+  return (
+    typeof err === 'object' &&
+    err !== null &&
+    'errors' in err &&
+    Array.isArray((err as { errors?: unknown }).errors)
+  );
 }
 
 // -------------------------------------------------------------
@@ -382,12 +409,12 @@ export async function saveGalleryItemAction(data: Record<string, unknown>, id?: 
     revalidatePath('/gallery');
     revalidatePath('/');
     return { success: true };
-  } catch (err: any) {
-    if (err && err.errors && Array.isArray(err.errors)) {
-      const messages = err.errors.map((e: any) => `${e.path.join('.')}: ${e.message}`).join(', ');
+  } catch (err: unknown) {
+    if (isZodErrorLike(err)) {
+      const messages = err.errors.map((e) => `${e.path.join('.')}: ${e.message}`).join(', ');
       return { success: false, error: `Validation error: ${messages}` };
     }
-    return { success: false, error: err?.message || 'Failed to save gallery item.' };
+    return { success: false, error: getErrorMessage(err, 'Failed to save gallery item.') };
   }
 }
 

@@ -1,15 +1,7 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
 import { siteConfig } from '@/config/site';
 import { ThemeProvider } from '@/components/layout/ThemeProvider';
-import IntegrationScripts from '@/components/layout/IntegrationScripts';
 import './globals.css';
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.domain),
@@ -70,14 +62,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} antialiased h-full`}>
+    <html lang="en" data-scroll-behavior="smooth" className="antialiased h-full">
       <head>
         <link rel="preconnect" href="https://img.youtube.com" />
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://maps.google.com" />
       </head>
       <body className="min-h-full flex flex-col bg-slate-950 text-slate-100 font-sans selection:bg-amber-500 selection:text-slate-950">
-        <IntegrationScripts />
         <ThemeProvider>
           {children}
         </ThemeProvider>

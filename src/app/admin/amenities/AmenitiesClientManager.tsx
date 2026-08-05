@@ -11,6 +11,9 @@ import { saveAmenityAction, deleteAmenityAction } from '@/app/actions/crud';
 import { useToast } from '@/components/ui/toast';
 import { Textarea } from '@/components/ui/textarea';
 
+type AmenityCategory = 'land' | 'house' | 'general';
+type AmenityCategoryFilter = 'all' | AmenityCategory;
+
 const ICON_OPTIONS = [
   { value: 'shield-check', label: '🛡️ Shield Check (Gated Security)' },
   { value: 'road', label: '🛣️ Road (Asphalt / Tar Roads)' },
@@ -36,7 +39,7 @@ export const AmenitiesClientManager: React.FC<{ initialAmenities: Amenity[] }> =
   const [amenities, setAmenities] = useState<Amenity[]>(initialAmenities);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
-  const [activeCategoryFilter, setActiveCategoryFilter] = useState<'all' | 'land' | 'house' | 'general'>('all');
+  const [activeCategoryFilter, setActiveCategoryFilter] = useState<AmenityCategoryFilter>('all');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -144,7 +147,7 @@ export const AmenitiesClientManager: React.FC<{ initialAmenities: Amenity[] }> =
         ].map((tab) => (
           <button
             key={tab.key}
-            onClick={() => setActiveCategoryFilter(tab.key as any)}
+            onClick={() => setActiveCategoryFilter(tab.key as AmenityCategoryFilter)}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               activeCategoryFilter === tab.key
                 ? 'bg-amber-500 text-slate-950 font-bold shadow'
@@ -202,7 +205,7 @@ export const AmenitiesClientManager: React.FC<{ initialAmenities: Amenity[] }> =
               <Label>Category</Label>
               <select
                 value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value as AmenityCategory })}
                 className="w-full mt-1 px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-lg text-slate-100 text-sm focus:outline-none focus:border-amber-500 transition-colors"
               >
                 {CATEGORY_OPTIONS.map((c) => (

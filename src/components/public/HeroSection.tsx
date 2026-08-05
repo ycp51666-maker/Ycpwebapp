@@ -111,7 +111,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   desktopVideo,
   mobileVideo,
   desktopImage = 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1920&q=80',
-  mobileImage,
   posterImage = 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80',
   overlayOpacity = 70,
   heroBlur = 0,
@@ -127,7 +126,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   heroSubSize,
   headerLightTextColor,
   headerDarkTextColor,
-  heroVerticalPosition = 'center',
   heroContentWidth = '5xl',
   heroH1MarginTop = 'normal',
   heroSubMarginTop = 'normal',
@@ -149,7 +147,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   heroHeightMobile = 'screen',
 }) => {
   const [isVisitModalOpen, setIsVisitModalOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
   const { theme } = useTheme();
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -169,17 +166,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   `;
 
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
     if (videoRef.current && typeof videoSpeed === 'number') {
       videoRef.current.playbackRate = videoSpeed;
     }
   }, [videoSpeed]);
 
   // Derived client-side origin — empty string on server to avoid hydration mismatch
-  const pageOrigin = isMounted ? window.location.origin : '';
+  const pageOrigin = '';
 
   const secondaryLabel = secondaryCtaLabel || 'Schedule a Site Visit';
   const isContactAction = secondaryLabel.toLowerCase().includes('contact');
@@ -270,13 +263,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       : heroSubSize === 'large'
       ? 'text-base sm:text-xl'
       : 'text-sm sm:text-lg';
-
-  const verticalJustifyClass =
-    heroVerticalPosition === 'top'
-      ? 'justify-start pt-20 sm:pt-28 pb-12'
-      : heroVerticalPosition === 'bottom'
-      ? 'justify-end pt-12 pb-24 sm:pb-32'
-      : 'justify-center pt-16 sm:pt-24 pb-12';
 
   const containerWidthClass =
     heroContentWidth === '3xl'
@@ -389,14 +375,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       ? ''
       : 'max-sm:items-center max-sm:text-center';
 
-  const responsiveOffsetStyle = React.useMemo(() => {
-    return {
-      '--hero-offset-x': `${heroOffsetX || 0}px`,
-      '--hero-offset-y': `${heroOffsetY || 0}px`,
-      '--hero-mobile-offset-x': `${heroMobileOffsetX || 0}px`,
-      '--hero-mobile-offset-y': `${heroMobileOffsetY || 0}px`,
-    } as React.CSSProperties;
-  }, [heroOffsetX, heroOffsetY, heroMobileOffsetX, heroMobileOffsetY]);
+  const responsiveOffsetStyle = {
+    '--hero-offset-x': `${heroOffsetX || 0}px`,
+    '--hero-offset-y': `${heroOffsetY || 0}px`,
+    '--hero-mobile-offset-x': `${heroMobileOffsetX || 0}px`,
+    '--hero-mobile-offset-y': `${heroMobileOffsetY || 0}px`,
+  } as React.CSSProperties;
 
   return (
     <>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { requireAdmin } from '@/lib/auth/admin';
 import { createAdminClient } from '@/lib/supabase/server';
-import { Location } from '@/types/database';
 import { LocationsClientManager } from './LocationsClientManager';
 
 export const dynamic = 'force-dynamic';

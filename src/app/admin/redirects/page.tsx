@@ -6,6 +6,22 @@ import { SiteSettingRecord } from '../settings/SettingsClientManager';
 
 export const dynamic = 'force-dynamic';
 
+interface RedirectLocationRoute {
+  slug: string;
+  name: string;
+}
+
+interface RedirectProjectRoute {
+  slug: string;
+  name: string;
+  locations?: { slug: string } | null;
+}
+
+interface RedirectConfigRoute {
+  slug: string;
+  name: string;
+}
+
 export default async function AdminRedirectsPage() {
   await requireAdmin(['super_admin', 'content_admin']);
   const supabase = await createAdminClient();
@@ -19,9 +35,9 @@ export default async function AdminRedirectsPage() {
   ]);
 
   const settings = (settingsRes.data as SiteSettingRecord[]) || [];
-  const locations = (locationsRes.data as any[]) || [];
-  const projects = (projectsRes.data as any[]) || [];
-  const configs = (configsRes.data as any[]) || [];
+  const locations = (locationsRes.data as unknown as RedirectLocationRoute[]) || [];
+  const projects = (projectsRes.data as unknown as RedirectProjectRoute[]) || [];
+  const configs = (configsRes.data as unknown as RedirectConfigRoute[]) || [];
 
   // Compile active route paths for selection dropdowns
   const activeRoutes = [

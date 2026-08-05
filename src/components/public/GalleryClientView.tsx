@@ -1,17 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Camera, MapPin, Phone, Film, Tv2, Share2 } from 'lucide-react';
+import { MapPin, Phone } from 'lucide-react';
 import { GalleryItem, Project, Location } from '@/types/database';
-import { WhatsAppIcon, YoutubeIcon, InstagramIcon } from '@/components/ui/icons';
+import { WhatsAppIcon } from '@/components/ui/icons';
 import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
-import { siteConfig } from '@/config/site';
 import { Badge } from '@/components/ui/badge';
 import { GalleryLightbox } from '@/components/public/GalleryLightbox';
-import {
-  getMediaKind, groupByKind, totalCount,
-  getKindLabel, GalleryMediaKind,
-} from '@/lib/utils/gallery';
 
 export interface GalleryClientViewProps {
   galleryItems: GalleryItem[];

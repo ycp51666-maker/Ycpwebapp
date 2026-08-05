@@ -817,7 +817,7 @@ export const PagesClientManager: React.FC<{ initialPages: ContentPage[] }> = ({ 
                 {/* Section 0: Hero Badge Tag Controls */}
                 <div className="p-3 bg-slate-950/80 border border-slate-800/80 rounded-xl space-y-3">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider">0. Hero Badge Tag Settings ("DTCP &amp; RERA Approved")</h4>
+                    <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider">0. Hero Badge Tag Settings (&quot;DTCP &amp; RERA Approved&quot;)</h4>
                     <label className="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
                       <input
                         type="checkbox"

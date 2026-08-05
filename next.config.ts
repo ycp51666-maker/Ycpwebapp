@@ -7,8 +7,8 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
-    // Allow direct loading of remote CDNs to prevent Node.js proxy timeouts
-    unoptimized: true,
+    // Keep local development lenient while preserving optimized production images.
+    unoptimized: process.env.NODE_ENV === 'development',
     dangerouslyAllowLocalIP: process.env.NODE_ENV === 'development',
     qualities: [75, 90],
     remotePatterns: [

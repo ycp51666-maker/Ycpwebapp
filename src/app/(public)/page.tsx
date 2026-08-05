@@ -8,7 +8,7 @@ import {
   getPublishedGalleryItems,
   getContentPage,
 } from '@/lib/data';
-import { getTestimonials, getHomepageStats } from '@/lib/data/settings';
+import { getTestimonials } from '@/lib/data/settings';
 import { generateHomePageMetadata, getHomePageJsonLd } from '@/lib/seo/metadata';
 
 import { HeroSection } from '@/components/public/HeroSection';
@@ -27,13 +27,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   // Fetch dynamic content and records from data access layer
-  const [locations, projects, galleryItems, homeContent, testimonials, siteStats] = await Promise.all([
+  const [locations, projects, galleryItems, homeContent, testimonials] = await Promise.all([
     getPublishedLocations({ featuredOnly: true }),
     getPublishedProjects({ featuredOnly: true }),
     getPublishedGalleryItems({ featuredOnly: true }),
     getContentPage('home'),
     getTestimonials(),
-    getHomepageStats(),
   ]);
 
   const jsonLd = getHomePageJsonLd();

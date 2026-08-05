@@ -3,6 +3,17 @@
 import { contactMessageSchema, siteVisitSchema } from '@/lib/validation/messages';
 import { createPublicClient } from '@/lib/supabase/server';
 
+interface EnquiryQueryBuilder extends PromiseLike<{ data?: unknown; error?: { message: string } | null }> {
+  select(columns: string): EnquiryQueryBuilder;
+  insert(data: unknown): EnquiryQueryBuilder;
+  eq(column: string, value: unknown): EnquiryQueryBuilder;
+  maybeSingle(): Promise<{ data: unknown | null; error: { message: string } | null }>;
+}
+
+interface EnquirySupabaseClient {
+  from(table: string): EnquiryQueryBuilder;
+}
+
 // In-memory rate limiting map for production environments
 const ipRateLimitMap = new Map<string, number>();
 
@@ -50,7 +61,7 @@ export async function submitContactEnquiryAction(formData: {
     const normalizedPhone = validated.phone.replace(/[^0-9+]/g, '');
     const normalizedEmail = validated.email ? validated.email.trim().toLowerCase() : null;
 
-    const supabase = createPublicClient();
+    const supabase = createPublicClient() as unknown as EnquirySupabaseClient;
 
     // 5. Server-side Entity Verification
     let validLocationId: string | null = null;
@@ -95,8 +106,7 @@ export async function submitContactEnquiryAction(formData: {
       read_at: null,
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (supabase.from('messages') as any).insert(insertPayload);
+    const { error } = await supabase.from('messages').insert(insertPayload);
 
     if (error) {
       console.error('Database error storing contact enquiry:', error.message);
@@ -104,7 +114,7 @@ export async function submitContactEnquiryAction(formData: {
     }
 
     return { success: true };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Validation error processing contact enquiry:', err);
     return { success: false, error: 'Please check your name, phone number, and consent check.' };
   }
@@ -146,7 +156,7 @@ export async function submitSiteVisitBookingAction(formData: {
     const normalizedPhone = validated.phone.replace(/[^0-9+]/g, '');
     const normalizedEmail = validated.email ? validated.email.trim().toLowerCase() : null;
 
-    const supabase = createPublicClient();
+    const supabase = createPublicClient() as unknown as EnquirySupabaseClient;
 
     // 5. Server-side Entity Verification
     let validLocationId: string | null = null;
@@ -193,8 +203,7 @@ export async function submitSiteVisitBookingAction(formData: {
       read_at: null,
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (supabase.from('messages') as any).insert(insertPayload);
+    const { error } = await supabase.from('messages').insert(insertPayload);
 
     if (error) {
       console.error('Database error storing site visit booking:', error.message);
@@ -202,7 +211,7 @@ export async function submitSiteVisitBookingAction(formData: {
     }
 
     return { success: true };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Validation error processing site visit booking:', err);
     return { success: false, error: 'Please check your name, phone number, and visit date.' };
   }

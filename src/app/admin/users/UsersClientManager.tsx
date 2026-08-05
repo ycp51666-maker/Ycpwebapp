@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ShieldCheck, Edit3, Save, UserPlus, Info } from 'lucide-react';
+import { ShieldCheck, Edit3, Save, UserPlus } from 'lucide-react';
 import { AdminProfile, AdminRole } from '@/types/database';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

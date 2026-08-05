@@ -59,7 +59,7 @@ export const RedirectsClientManager: React.FC<{
 
   const handleSaveRedirects = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await saveSiteSettingAction('url_redirects', redirectsList as any);
+    const res = await saveSiteSettingAction('url_redirects', redirectsList.map((redirect) => ({ ...redirect })));
     if (res.success) {
       toast({ type: 'success', title: 'Redirect Rules Saved' });
     } else {

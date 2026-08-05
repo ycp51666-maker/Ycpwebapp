@@ -97,20 +97,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     )
     .filter(Boolean) as MetadataRoute.Sitemap;
 
-  const hierarchicalProjectRoutes: MetadataRoute.Sitemap = [];
-  for (const proj of projects) {
-    const loc = locations.find((l) => l.id === proj.location_id);
-    if (loc) {
-      const route = applyOverride(
-        proj.id,
-        { changeFrequency: 'daily', priority: 0.9 },
-        new Date(proj.updated_at || proj.created_at),
-        `${baseUrl}/locations/${loc.slug}/${proj.slug}`,
-      );
-      if (route) hierarchicalProjectRoutes.push(route);
-    }
-  }
-
   const propertyRoutes: MetadataRoute.Sitemap = properties
     .map((prop) =>
       applyOverride(
@@ -134,5 +120,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     )
     .filter(Boolean) as MetadataRoute.Sitemap;
 
-  return [...staticRoutes, ...locationRoutes, ...projectRoutes, ...hierarchicalProjectRoutes, ...propertyRoutes];
+  return [...staticRoutes, ...locationRoutes, ...projectRoutes, ...propertyRoutes];
 }

@@ -131,11 +131,6 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Custom Tracking script */}
-      {seoOverride?.custom_tracking_script && (
-        <div dangerouslySetInnerHTML={{ __html: seoOverride.custom_tracking_script }} />
-      )}
-
       <div className="bg-slate-950 text-slate-100 min-h-screen">
       {/* Breadcrumb Header */}
       <div className="bg-slate-900 border-b border-slate-800 py-4 px-4 sm:px-6 lg:px-8">

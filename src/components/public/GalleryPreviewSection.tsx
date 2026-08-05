@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Camera, ArrowRight, Play, Film } from 'lucide-react';
+import { Camera, ArrowRight, Film } from 'lucide-react';
 import { YoutubeIcon, InstagramIcon } from '@/components/ui/icons';
 import { GalleryItem } from '@/types/database';
 import { Button } from '@/components/ui/button';

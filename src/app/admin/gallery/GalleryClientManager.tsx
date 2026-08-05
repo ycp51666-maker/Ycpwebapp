@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable @next/next/no-img-element */
 
 import React, { useState } from 'react';
 import {
@@ -180,7 +181,6 @@ export const GalleryClientManager: React.FC<GalleryClientManagerProps> = ({
   const { toast } = useToast();
   const [items, setItems] = useState<GalleryItem[]>(initialItems);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [dialogProjectId, setDialogProjectId] = useState<string>('');
   const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -229,7 +229,6 @@ export const GalleryClientManager: React.FC<GalleryClientManagerProps> = ({
 
   const openAdd = (projectId = '') => {
     setEditingItem(null);
-    setDialogProjectId(projectId);
     setSharedProjectId(projectId || projects[0]?.id || '');
     resetAddState();
     setIsDialogOpen(true);

@@ -285,7 +285,7 @@ export const TestimonialsClientManager: React.FC<{ initialSettings: SiteSettingR
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await saveSiteSettingAction('testimonials', testimonials as any);
+    const res = await saveSiteSettingAction('testimonials', testimonials);
     if (res.success) {
       toast({ type: 'success', title: 'Testimonials Saved' });
     } else {
@@ -303,7 +303,7 @@ export const TestimonialsClientManager: React.FC<{ initialSettings: SiteSettingR
           <Star className="w-6 h-6 text-amber-400" /> Client Testimonials
         </h1>
         <p className="text-xs text-slate-400 mt-1">
-          Manage testimonials shown in the "Hear From Our Homeowners" section.
+          Manage testimonials shown in the &quot;Hear From Our Homeowners&quot; section.
         </p>
       </div>
 
@@ -411,7 +411,7 @@ export const FaqsClientManager: React.FC<{ initialSettings: SiteSettingRecord[] 
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await saveSiteSettingAction('faqs', faqs as any);
+    const res = await saveSiteSettingAction('faqs', faqs);
     if (res.success) {
       toast({ type: 'success', title: 'FAQs Saved' });
     } else {
@@ -533,7 +533,7 @@ export const IntegrationsClientManager: React.FC<{ initialSettings: SiteSettingR
           <Settings className="w-4 h-4 text-amber-400" /> Webmasters & Tracking Consoles
         </div>
         <p className="text-xs text-slate-400 leading-relaxed font-semibold">
-          Paste your external search verification and marketing pixel IDs. The required meta tags and script snippets will be automatically injected into your public pages' header.
+          Paste your external search verification and marketing pixel IDs. The required meta tags and script snippets will be automatically injected into your public pages&apos; header.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

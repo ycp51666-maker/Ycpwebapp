@@ -4,6 +4,9 @@ import { siteConfig } from '@/config/site';
 import { SEOMetadata } from '@/types/database';
 import { getStaticPageByKey } from '@/config/static-pages';
 
+type OpenGraphType = 'website' | 'article';
+type TwitterCardType = 'summary' | 'summary_large_image';
+
 // ─── Static page metadata ─────────────────────────────────────────────────────
 
 /**
@@ -123,8 +126,10 @@ export function buildMetadataFromOverride(
         nosnippet: robotsParts.includes('nosnippet'),
       };
 
-  const ogType = (override?.og_type || 'website') as any;
-  const twitterCard = (override?.twitter_card || 'summary_large_image') as any;
+  const ogType = (override?.og_type === 'article' ? 'article' : 'website') satisfies OpenGraphType;
+  const twitterCard = (
+    override?.twitter_card === 'summary' ? 'summary' : 'summary_large_image'
+  ) satisfies TwitterCardType;
   const ogImageAlt = override?.open_graph_image_alt || title;
 
   return {
@@ -421,4 +426,3 @@ export function resolveJsonLd(
   }
   return defaultData;
 }
-

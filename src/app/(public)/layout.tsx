@@ -1,4 +1,5 @@
 import React from 'react';
+import { Metadata } from 'next';
 import Script from 'next/script';
 import dynamic from 'next/dynamic';
 import { Header } from '@/components/layout/Header';
@@ -17,6 +18,26 @@ const AutoContactPopup = dynamic(
 
 export const revalidate = 300; // Revalidate every 5 minutes (ISR)
 
+function extractVerificationToken(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return '';
+  const contentMatch = /content\s*=\s*["']([^"']+)["']/i.exec(trimmed);
+  return contentMatch ? contentMatch[1] : trimmed;
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const integrations = await getIntegrationsSettings();
+  const google = extractVerificationToken(integrations?.google_search_console || '');
+
+  return google
+    ? {
+        verification: {
+          google,
+        },
+      }
+    : {};
+}
+
 export default async function PublicLayout({
   children,
 }: {
@@ -32,14 +53,14 @@ export default async function PublicLayout({
     getContactInfo(),
   ]);
 
-  const homeContent = (homePage?.content || {}) as Record<string, any>;
+  const homeContent = (homePage?.content || {}) as {
+    header_light_text_color?: string;
+    header_dark_text_color?: string;
+  };
 
   return (
     <ToastProvider>
-      {/* Dynamic SEO Verification & Tracking Scripts */}
-      {integrations?.google_search_console && (
-        <meta name="google-site-verification" content={integrations.google_search_console} />
-      )}
+      {/* Dynamic tracking scripts */}
       {integrations?.google_analytics && (
         <>
           <Script

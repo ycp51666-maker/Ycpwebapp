@@ -25,7 +25,6 @@ import { siteConfig } from '@/config/site';
 import { Drawer } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/components/layout/ThemeProvider';
-import { buildWhatsAppUrl } from '@/lib/utils/whatsapp';
 import { SocialLinks, GlobalAnnouncement, ContactInfo } from '@/lib/data/settings';
 import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
 

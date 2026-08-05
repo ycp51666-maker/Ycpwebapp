@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Building2, Plus, Edit3, Trash2, Eye, EyeOff, Search, MapPin, Video, Sparkles, Check, CheckSquare } from 'lucide-react';
+import { Building2, Plus, Edit3, Trash2, Eye, EyeOff, Search, MapPin, Video, Sparkles, Check } from 'lucide-react';
 import { Location, Project, Amenity } from '@/types/database';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,6 +18,12 @@ export interface ProjectsClientManagerProps {
   initialProjects: Project[];
   locations: Location[];
   masterAmenities: Amenity[];
+}
+
+interface ProjectAmenityLink {
+  amenity_id: string;
+  custom_description: string | null;
+  display_order: number | null;
 }
 
 export const ProjectsClientManager: React.FC<ProjectsClientManagerProps> = ({
@@ -177,7 +183,7 @@ export const ProjectsClientManager: React.FC<ProjectsClientManagerProps> = ({
 
     const res = await getProjectAmenitiesAction(proj.id);
     if (res.success && res.data) {
-      const list = (res.data as any[]).map((pa) => ({
+      const list = (res.data as ProjectAmenityLink[]).map((pa) => ({
         amenity_id: pa.amenity_id,
         custom_description: pa.custom_description || '',
         display_order: pa.display_order || 0,

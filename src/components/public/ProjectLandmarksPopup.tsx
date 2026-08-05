@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable @next/next/no-img-element */
 
 import React, { useState } from 'react';
 import { Compass, GraduationCap, Hospital, Car, Bus, ShoppingBag, MapPin, Maximize2 } from 'lucide-react';

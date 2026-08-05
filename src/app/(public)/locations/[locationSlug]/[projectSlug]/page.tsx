@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: HierarchicalProjectPageProps)
     description:
       project.short_description ||
       `Explore ${project.name} situated in ${locName}. Featuring DTCP approved plots, 2BHK/3BHK/4BHK independent villas, and road infrastructure.`,
-    canonicalUrl: `${siteConfig.domain}/locations/${locationSlug}/${project.slug}`,
+    canonicalUrl: `${siteConfig.domain}/projects/${project.slug}`,
     ogImage: project.hero_image_path ?? undefined,
   });
 }
@@ -123,11 +123,6 @@ export default async function HierarchicalProjectPage({ params }: HierarchicalPr
 
   const locName = location?.name || project.location?.name || 'Namakkal';
 
-  const whatsappUrl = buildWhatsAppUrl({
-    projectName: project.name,
-    locationName: locName,
-  });
-
   const floorPlanItems = galleryItems.filter(
     (item) => item.category === 'floor_plan' || item.category === 'layout_map'
   );
@@ -138,11 +133,6 @@ export default async function HierarchicalProjectPage({ params }: HierarchicalPr
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-
-      {/* Custom Tracking script */}
-      {seoOverride?.custom_tracking_script && (
-        <div dangerouslySetInnerHTML={{ __html: seoOverride.custom_tracking_script }} />
-      )}
 
       <div className="bg-slate-950 text-slate-100 min-h-screen">
         {/* Hierarchical Breadcrumb Gradient Header Banner */}

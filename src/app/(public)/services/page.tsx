@@ -3,11 +3,6 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import {
   Layers,
-  Maximize,
-  Building2,
-  Car,
-  FileCheck,
-  Landmark,
   ArrowRight,
 } from 'lucide-react';
 import Image from 'next/image';

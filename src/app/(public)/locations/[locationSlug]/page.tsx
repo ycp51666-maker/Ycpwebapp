@@ -2,7 +2,6 @@ import React from 'react';
 import { Metadata } from 'next';
 import { notFound, redirect, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import { MapPin, ChevronRight, Compass, ShieldCheck } from 'lucide-react';
 import { getLocationBySlug, getPublishedProjects, getPublishedConfigurations, getPublishedLocations, getLocationLandmarks } from '@/lib/data';
 import { getActiveAmenities } from '@/lib/data/amenities';
@@ -74,10 +73,6 @@ export default async function LocationDetailPage({ params }: LocationDetailPageP
     }
   }
 
-  const fallbackImage =
-    location.hero_image_path ||
-    'https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=1200&q=80';
-
   const jsonLd = resolveJsonLd(seoOverride, getLocationJsonLd(location));
 
   return (
@@ -87,11 +82,6 @@ export default async function LocationDetailPage({ params }: LocationDetailPageP
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-
-      {/* Custom Tracking script */}
-      {seoOverride?.custom_tracking_script && (
-        <div dangerouslySetInnerHTML={{ __html: seoOverride.custom_tracking_script }} />
-      )}
 
       <div className="bg-slate-950 text-slate-100 min-h-screen">
         {/* Compact Gradient Location Hero Header */}

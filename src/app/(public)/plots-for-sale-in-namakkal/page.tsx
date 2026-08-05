@@ -1,7 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { ShieldCheck, MapPin, ChevronRight, Compass, ArrowRight } from 'lucide-react';
+import { ShieldCheck, ChevronRight, Compass, ArrowRight } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 import { getPublishedProjects, getPublishedConfigurations, getLocationBySlug } from '@/lib/data';
 import { FeaturedProjectsSection } from '@/components/public/FeaturedProjectsSection';

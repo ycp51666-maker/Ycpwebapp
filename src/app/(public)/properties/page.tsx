@@ -1,7 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Sliders, MapPin, ChevronRight, Compass, ArrowRight } from 'lucide-react';
+import { Sliders, MapPin, ChevronRight, ArrowRight } from 'lucide-react';
 import { getPublishedConfigurations, getPublishedLocations, getPublishedProjects } from '@/lib/data';
 import { siteConfig } from '@/config/site';
 import { Badge } from '@/components/ui/badge';

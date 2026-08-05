@@ -1,11 +1,11 @@
 'use client';
+/* eslint-disable @next/next/no-img-element */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight, ExternalLink, Play } from 'lucide-react';
 import { GalleryItem } from '@/types/database';
 import {
-  GalleryMediaKind, getMediaThumb, getMediaKind, getYoutubeEmbedUrl, getYoutubeId,
+  GalleryMediaKind, getMediaThumb, getMediaKind, getYoutubeEmbedUrl,
   isYouTubeItem, isInstagramItem, isVideoItem, getInstagramEmbedUrl,
 } from '@/lib/utils/gallery';
 import { getMediaUrl } from '@/lib/utils/media';

@@ -35,8 +35,6 @@ export interface MessagesClientManagerProps {
 
 export const MessagesClientManager: React.FC<MessagesClientManagerProps> = ({
   initialMessages,
-  locations,
-  projects,
   currentParams,
 }) => {
   const { toast } = useToast();

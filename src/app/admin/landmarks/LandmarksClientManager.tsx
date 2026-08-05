@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable @next/next/no-img-element */
 
 import React, { useState } from 'react';
 import { Plus, Edit3, Trash2, Navigation } from 'lucide-react';

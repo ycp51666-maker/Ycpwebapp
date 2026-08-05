@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Sparkles } from 'lucide-react';
 import { SiteVisitForm } from '@/components/forms/SiteVisitForm';
@@ -11,6 +11,15 @@ export const AutoContactPopup: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false); // controls CSS animation
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleClose = useCallback(() => {
+    setIsVisible(false);
+    // Wait for exit animation to finish then unmount
+    setTimeout(() => {
+      setIsOpen(false);
+      sessionStorage.setItem('auto_contact_popup_dismissed', 'true');
+    }, 350);
+  }, []);
 
   // Hydration-safe mount
   useEffect(() => {
@@ -53,16 +62,7 @@ export const AutoContactPopup: React.FC = () => {
     const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose(); };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [isOpen]);
-
-  const handleClose = () => {
-    setIsVisible(false);
-    // Wait for exit animation to finish then unmount
-    setTimeout(() => {
-      setIsOpen(false);
-      sessionStorage.setItem('auto_contact_popup_dismissed', 'true');
-    }, 350);
-  };
+  }, [isOpen, handleClose]);
 
   if (!mounted || !isOpen) return null;
 

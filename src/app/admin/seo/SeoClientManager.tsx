@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Search, Plus, Edit3, Trash2, Eye, EyeOff, Globe, ExternalLink, Link2,
   Map, Bot, BarChart3, CheckCircle2, AlertTriangle, Info,
@@ -76,15 +76,6 @@ function GooglePreview({ title, description, url }: { title: string; description
         </p>
       </div>
     </div>
-  );
-}
-
-function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) {
-  return (
-    <button type="button" onClick={() => onChange(!checked)}
-      className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 focus:outline-none ${checked ? 'bg-amber-500' : 'bg-slate-700'}`}>
-      <span className={`inline-block h-3.5 w-3.5 rounded-full bg-white shadow transition-transform duration-200 ${checked ? 'translate-x-5' : 'translate-x-0.5'}`} />
-    </button>
   );
 }
 
@@ -191,7 +182,9 @@ interface SeoCheckResult {
   severity: 'error' | 'warning' | 'info' | 'success';
 }
 
-function auditSeoState(formData: any): { score: number; checks: SeoCheckResult[] } {
+type SeoFormData = typeof defaultForm;
+
+function auditSeoState(formData: SeoFormData): { score: number; checks: SeoCheckResult[] } {
   let score = 100;
   const checks: SeoCheckResult[] = [];
   const focus = formData.focus_keyword.trim().toLowerCase();
@@ -311,14 +304,6 @@ export const SeoClientManager: React.FC<Props> = ({
     }
   })();
   const selectedEntity = entityOptions.find((e) => e.id === formData.entity_id) ?? null;
-
-  useEffect(() => {
-    if (selectedEntity && !editingRecord) {
-      const url = `${siteConfig.domain}${entityTypeConfig.urlPrefix}${selectedEntity.slug}`;
-      patch('canonical_url', url);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData.entity_id, formData.entity_type]);
 
   const handleEntityTypeChange = (type: string) => {
     setFormData((prev) => ({
@@ -760,7 +745,20 @@ export const SeoClientManager: React.FC<Props> = ({
                         : formData.entity_type === 'project' ? 'Select Project'
                         : 'Select Property'}
                     </Label>
-                    <select value={formData.entity_id} onChange={(e) => patch('entity_id', e.target.value)} required
+                    <select
+                      value={formData.entity_id}
+                      onChange={(e) => {
+                        const entityId = e.target.value;
+                        const entity = entityOptions.find((option) => option.id === entityId);
+                        setFormData((prev) => ({
+                          ...prev,
+                          entity_id: entityId,
+                          canonical_url: !editingRecord && entity
+                            ? `${siteConfig.domain}${entityTypeConfig.urlPrefix}${entity.slug}`
+                            : prev.canonical_url,
+                        }));
+                      }}
+                      required
                       className="w-full mt-1 px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-lg text-slate-100 text-xs focus:outline-none focus:border-amber-500 transition-colors">
                       <option value="" disabled>— pick one —</option>
                       {entityOptions.map((opt) => (

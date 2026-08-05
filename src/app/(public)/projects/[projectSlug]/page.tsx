@@ -1,7 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import Image from 'next/image';
 import { notFound, redirect, permanentRedirect } from 'next/navigation';
 import {
   getProjectBySlug,
@@ -14,27 +13,11 @@ import {
 } from '@/lib/data';
 
 import {
-  ShieldCheck,
-  BedDouble,
-  Bath,
-  ArrowRight,
   ChevronRight,
-  Maximize,
-  Sparkles,
-  FileText,
-  MapPin,
-  Car,
-  IndianRupee,
   Phone,
 } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/ui/icons';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ProjectVideoPlayer } from '@/components/public/ProjectVideoPlayer';
-import { ProjectAmenitiesPopup } from '@/components/public/ProjectAmenitiesPopup';
-import { ProjectLandmarksPopup } from '@/components/public/ProjectLandmarksPopup';
-import { ProjectLocationMapPopup } from '@/components/public/ProjectLocationMapPopup';
-import { GalleryLightbox } from '@/components/public/GalleryLightbox';
 import { ProjectAccordionSections } from '@/components/public/ProjectAccordionSections';
 import { SiteVisitCTASection } from '@/components/public/SiteVisitCTASection';
 import { siteConfig } from '@/config/site';
@@ -122,10 +105,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   const floorPlans = galleryItems.filter((item) => item.category === 'floor_plan');
 
-  const fallbackHero =
-    project.hero_image_path ||
-    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80';
-
   return (
     <>
       {/* JSON-LD Structured Data (admin-overridable) */}
@@ -133,11 +112,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-
-      {/* Custom Tracking script */}
-      {seoOverride?.custom_tracking_script && (
-        <div dangerouslySetInnerHTML={{ __html: seoOverride.custom_tracking_script }} />
-      )}
 
       <div className="bg-slate-950 text-slate-100 min-h-screen">
 

@@ -2,6 +2,16 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import { Database } from '@/types/database';
 
+interface RedirectSettingsClient {
+  from(table: 'site_settings'): {
+    select(columns: string): {
+      eq(column: string, value: unknown): {
+        maybeSingle(): Promise<{ data: { value: unknown } | null; error: { message: string } | null }>;
+      };
+    };
+  };
+}
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
@@ -46,7 +56,7 @@ export async function updateSession(request: NextRequest) {
     !pathname.includes('.')
   ) {
     try {
-      const { data: redirectSetting } = await (supabase as any)
+      const { data: redirectSetting } = await (supabase as unknown as RedirectSettingsClient)
         .from('site_settings')
         .select('*')
         .eq('key', 'url_redirects')

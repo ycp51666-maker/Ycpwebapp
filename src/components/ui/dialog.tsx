@@ -25,25 +25,10 @@ export const Dialog: React.FC<DialogProps> = ({
   bodyClassName,
 }) => {
   const [mounted, setMounted] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
     requestAnimationFrame(() => setMounted(true));
   }, []);
-
-  // Open: mount then trigger visible
-  useEffect(() => {
-    if (!mounted) return;
-    if (isOpen) {
-      setShouldRender(true);
-      requestAnimationFrame(() => requestAnimationFrame(() => setIsVisible(true)));
-    } else {
-      setIsVisible(false);
-      const t = setTimeout(() => setShouldRender(false), 300);
-      return () => clearTimeout(t);
-    }
-  }, [isOpen, mounted]);
 
   // Body scroll lock
   useEffect(() => {
@@ -59,14 +44,13 @@ export const Dialog: React.FC<DialogProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  if (!mounted || !shouldRender) return null;
+  if (!mounted || !isOpen) return null;
 
   return createPortal(
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
       {/* Backdrop */}
       <div
         className="dialog-backdrop absolute inset-0 bg-black/60 transition-opacity duration-300"
-        style={{ opacity: isVisible ? 1 : 0 }}
         onClick={onClose}
         aria-hidden="true"
       />
@@ -78,8 +62,8 @@ export const Dialog: React.FC<DialogProps> = ({
           className
         )}
         style={{
-          opacity: isVisible ? 1 : 0,
-          transform: isVisible ? 'translateY(0) scale(1)' : 'translateY(28px) scale(0.92)',
+          opacity: 1,
+          transform: 'translateY(0) scale(1)',
           transitionProperty: 'transform, opacity',
           transitionDuration: '380ms',
           transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
